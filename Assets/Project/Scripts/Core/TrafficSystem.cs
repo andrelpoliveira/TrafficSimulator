@@ -36,6 +36,8 @@ public class TrafficSystem : MonoBehaviour
     [Tooltip("Sistema de Levels")]
     private int currentLevel = 1;
     private float difficultyMultiplier = 1f;
+    [Tooltip("Tempo das previsões")]
+    private float remainingTime = 0f;
 
     #region Eventos
     /// <summary>
@@ -66,6 +68,7 @@ public class TrafficSystem : MonoBehaviour
     {
         //Debug.Log("Start Traffic");
         mainRoutine = StartCoroutine(TrafficLoop());
+        StartCoroutine(UpdateRemainingTime());
     }
     /// <summary>
     /// Encerra o tráfego parando as corrotinas
@@ -78,11 +81,16 @@ public class TrafficSystem : MonoBehaviour
             mainRoutine = null;
         }
 
+        remainingTime = 0f;
+
         StopAllCoroutines(); // garante o encerramento das corrotinas
 
         trafficSpawner.StopAllLanes();
     }
-
+    /// <summary>
+    /// Função para avanço de level
+    /// </summary>
+    /// <param name="level"></param>
     void LoadNextLevel(int level)
     {
         currentLevel = level;
@@ -108,6 +116,8 @@ public class TrafficSystem : MonoBehaviour
     {
         //Debug.Log("Dados recebidos!");
 
+        // Aplicação de contagem de tempo para troca de clima
+        remainingTime = 0f;
         //Aplica estado atual atual
         ApplyStatus(data.current_status);
 
@@ -144,6 +154,8 @@ public class TrafficSystem : MonoBehaviour
             {
                 var prediction = predictionQueue.Dequeue();
 
+                remainingTime += prediction.estimated_time / 1000f;
+
                 yield return new WaitForSeconds(prediction.estimated_time / 1000f);
 
                 string nextWeather = prediction.predictions.weather;
@@ -157,6 +169,7 @@ public class TrafficSystem : MonoBehaviour
                 prediction.predictions.weather = nextWeather;
 
                 ApplyStatus(prediction.predictions);
+                remainingTime = 0f;
             }
 
             //Debug.Log("Fila finalizada -> buscando nova API...");
@@ -239,6 +252,24 @@ public class TrafficSystem : MonoBehaviour
     bool IsValidTransition(string current, string next)
     {
         return GetNextWeather(current) == next;
+    }
+    /// <summary>
+    /// Corrotina para atualização do tempo entre os climas
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator UpdateRemainingTime()
+    {
+        while (true) 
+        {
+            if (remainingTime > 0)
+            {
+                remainingTime -= Time.deltaTime;
+
+                GameEvents.OnTimeNextWeather?.Invoke(remainingTime);
+            }
+
+            yield return null;
+        }
     }
     #endregion
 }

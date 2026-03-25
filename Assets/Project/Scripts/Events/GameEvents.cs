@@ -8,5 +8,6 @@ public static class GameEvents
     public static Action OnResetGame; // Evento de reset do game
     public static Action<int> OnNextLevel; // Evento de avanço de nível
     public static Action<float> OnTimeUpdated; // Evento de atualização do tempo de jogo
+    public static Action<float> OnTimeNextWeather; // Evento de atualização do tempo para o próximo clima
 
 }

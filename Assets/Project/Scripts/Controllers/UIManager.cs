@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
         GameEvents.OnPlayerWin += Win;
         GameEvents.OnResetGame += StartGame;
         GameEvents.OnTimeUpdated += UpdateTimer;
+        GameEvents.OnTimeNextWeather += UpdateTimerNextWeather;
         GameEvents.OnNextLevel += NextLevel;
     }
     /// <summary>
@@ -45,6 +46,7 @@ public class UIManager : MonoBehaviour
         GameEvents.OnPlayerWin -= Win;
         GameEvents.OnResetGame -= StartGame;
         GameEvents.OnTimeUpdated -= UpdateTimer;
+        GameEvents.OnTimeNextWeather -= UpdateTimerNextWeather;
         GameEvents.OnNextLevel -= NextLevel;
     }
     #endregion
@@ -149,7 +151,23 @@ public class UIManager : MonoBehaviour
 
         countDownGameText.text = $"{minutes:00}:{seconds:00}";
     }
+    /// <summary>
+    /// Atualiza o tempo para o próximo clima
+    /// </summary>
+    /// <param name="time"></param>
+    public void UpdateTimerNextWeather(float time)
+    {
+        if(time < 0) time = 0;
 
+        int minutes = Mathf.FloorToInt(time / 60f);
+        int seconds = Mathf.FloorToInt(time % 60f);
+
+        nextWeatherTimeText.text = $"{minutes:00}:{seconds:00}";
+    }
+    /// <summary>
+    /// Atualiza o level do jogo
+    /// </summary>
+    /// <param name="nextLevel"></param>
     public void UpdateLevel(int nextLevel)
     {
         currentLevelText.text = nextLevel.ToString();
@@ -177,6 +195,7 @@ public class UIManager : MonoBehaviour
     {
         losePanel.SetActive(true);
         gameStatusPanel.SetActive(false);
+        UpdateTimerNextWeather(0f);
     }
     /// <summary>
     /// Painel de Vitória
@@ -185,6 +204,7 @@ public class UIManager : MonoBehaviour
     {
         winPanel.SetActive(true);
         gameStatusPanel.SetActive(false);
+        UpdateTimerNextWeather(0f);
     }
     /// <summary>
     /// Avanço de level
