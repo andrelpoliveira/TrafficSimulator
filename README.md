@@ -87,16 +87,40 @@ As transições visuais são gerenciadas usando o Volume Global do Unity (Pós-p
 - Áudio ambiente de fundo para imersão
 - Projetado para aprimorar sutilmente a experiência de jogo
 
-## Mock API Setup
+## ▶️ Como executar o projeto
 
-Esse projeto utiliza API simulada.
+### 1. Abra o projeto no Unity
 
-### Etapas:
+- Versão recomendada do Unity: 6.3 LTS (6000.3.9f1)
+- Abra o Unity Hub
+- Clique em "Adicionar projeto"
+- Selecione a pasta do projeto
+
+---
+
+### 2. Configure a API simulada
 
 1. Abra o Mockoon
-2. Importe enviroment: - File: `Assets/Project/Scripts/Mock/traffic-api-mock.json`
-3. Inicie o servidor
-4. Endpoint default: http://localhost:3001/v1/traffic/status
+2. Importe o ambiente:
+
+- Arquivo: `Assets/Project/Scripts/Mock/traffic-api-mock.json`
+
+3. Inicie o servidor em: http://localhost:3001/v1/traffic/status
+
+---
+
+### 3. Executar o Jogo
+
+- Abra a cena principal em Assets/Project/Scenes/Main.unity
+- Clique em **Play**
+
+---
+
+### 4. Fluxo do Jogo
+
+- Clique no botão **Start**
+- Atravesse a rua evitando o trânsito
+- Cada travessia bem-sucedida carrega um novo cenário da API
 
 ## Author
 
