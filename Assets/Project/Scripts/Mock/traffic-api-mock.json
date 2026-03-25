@@ -1,0 +1,147 @@
+{
+  "uuid": "9bbc7a4d-b913-4139-ac1a-c2d51adbedbc",
+  "lastMigration": 33,
+  "name": "VBL Traffic & Weather API",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "f0374d62-7ffd-470f-ae60-c6b3bd0c2758",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "v1/traffic/status",
+      "responses": [
+        {
+          "uuid": "2daed41f-43d2-4b84-a5cd-2d609bccc782",
+          "body": "{\r\n  \"current_status\": {\r\n    \"vehicleDensity\": 0.2,\r\n    \"averageSpeed\": 100,\r\n    \"weather\": \"sunny\"\r\n  },\r\n  \"predicted_status\": [\r\n    {\r\n      \"estimated_time\": 7000,\r\n      \"predictions\": {\r\n        \"vehicleDensity\": 0.4,\r\n        \"averageSpeed\": 80,\r\n        \"weather\": \"clouded\"\r\n      }\r\n    },\r\n    {\r\n      \"estimated_time\": 12000,\r\n      \"predictions\": {\r\n        \"vehicleDensity\": 0.4,\r\n        \"averageSpeed\": 80,\r\n        \"weather\": \"foggy\"\r\n      }\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Sunny-Clouded",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "6ebd4bbd-f38f-4a42-a782-74fe98756617",
+          "body": "{\r\n  \"current_status\": {\r\n    \"vehicleDensity\": 0.6,\r\n    \"averageSpeed\": 80,\r\n    \"weather\": \"foggy\"\r\n  },\r\n  \"predicted_status\": [\r\n    {\r\n      \"estimated_time\": 5000,\r\n      \"predictions\": {\r\n        \"vehicleDensity\": 0.8,\r\n        \"averageSpeed\": 60,\r\n        \"weather\": \"light rain\"\r\n      }\r\n    },\r\n    {\r\n      \"estimated_time\": 10000,\r\n      \"predictions\": {\r\n        \"vehicleDensity\": 1,\r\n        \"averageSpeed\": 40,\r\n        \"weather\": \"heavy rain\"\r\n      }\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Light - Heave Rain",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "def432ac-d905-448f-a332-fc234bbd08cb",
+          "body": "{\r\n  \"current_status\": {\r\n    \"vehicleDensity\": 1.0,\r\n    \"averageSpeed\": 40,\r\n    \"weather\": \"heavy rain\"\r\n  },\r\n  \"predicted_status\": [\r\n    {\r\n      \"estimated_time\": 7000,\r\n      \"predictions\": {\r\n        \"vehicleDensity\": 0.2,\r\n        \"averageSpeed\": 100,\r\n        \"weather\": \"sunny\"\r\n      }\r\n    },\r\n    {\r\n      \"estimated_time\": 12000,\r\n      \"predictions\": {\r\n        \"vehicleDensity\": 0.4,\r\n        \"averageSpeed\": 80,\r\n        \"weather\": \"clouded\"\r\n      }\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Chaos",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": "SEQUENTIAL",
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "f0374d62-7ffd-470f-ae60-c6b3bd0c2758"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

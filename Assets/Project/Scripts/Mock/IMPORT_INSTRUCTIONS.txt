@@ -1,0 +1,13 @@
+Opção Cópia:
+
+1. Abrir o Mockoon
+2. Copiar arquivo content ou traffic-api-mock.json
+3. Importar para o clipboard
+4. Iniciar servidor Mockoon 
+
+Opção abrir no Mockoon:
+
+1. Abra o Mockoon
+2. Vá na opção Open Local Enviroment
+3. Busque o arquivo que está dentro da pasta Assets->Project->Script->Mockoon
+4. Após importar iniciar servidor Mockoon
