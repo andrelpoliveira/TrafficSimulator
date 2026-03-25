@@ -12,11 +12,11 @@ public class TrafficSpawner : MonoBehaviour
     /// </summary>
     /// <param name="density"></param>
     /// <param name="avgSpeed"></param>
-    public void UpdateTraffic(Status status)
+    public void UpdateTraffic(float density, float speed)
     {
         // Intervalo baseado na densidade
-        float normalized = Mathf.Clamp01(status.vehicleDensity);
-        float avgSpeed = status.averageSpeed;
+        float normalized = Mathf.Clamp01(density);
+        float avgSpeed = speed;
 
         // Curva suave baseado nas lanes
         float baseInterval = Mathf.Lerp(3f, 0.8f, normalized);

@@ -23,7 +23,7 @@ public class TrafficApiService : MonoBehaviour
             {
                 string json = request.downloadHandler.text;
 
-                Debug.Log("API Response: " + json);
+                //Debug.Log("API Response: " + json);
 
                 TrafficResponse data = JsonUtility.FromJson<TrafficResponse>(json);
 

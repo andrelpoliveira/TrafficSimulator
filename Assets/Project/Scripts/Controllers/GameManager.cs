@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour
     public Transform player; // Player
     public Vector3 startPosition; // Posição inicial do player
     [Space]
+    [Header("Progressão")]
+    public int currentLevel = 1; // Level da gameplay
+    [Space]
     [Header("Countdown")]
     public float gameTime = 60f; // Tempo de jogo
     [Tooltip("Corrotina")]
@@ -45,9 +48,16 @@ public class GameManager : MonoBehaviour
 
     #region Controle de tempo do game
     /// <summary>
-    /// Inicia o timer do game
+    /// Invoca a função para iniciar o contador
     /// </summary>
     public void StartGame()
+    {
+        Invoke(nameof(RunGame), 3f);
+    }
+    /// <summary>
+    /// Inicia contador do game
+    /// </summary>
+    void RunGame()
     {
         timerRoutine = StartCoroutine(GameTimer());
     }
@@ -66,7 +76,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("Tempo esgotado");
+        //Debug.Log("Tempo esgotado");
 
         GameOver();
     }
@@ -78,6 +88,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
+        StopCoroutine(timerRoutine);
+
         Invoke(nameof(Restart), 3f);
     }
     /// <summary>
@@ -85,7 +97,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Win()
     {
-        Invoke(nameof(Restart), 3f);
+        Invoke(nameof(NextLevel), 3f);
     }
     /// <summary>
     /// Reinicia partida
@@ -93,9 +105,23 @@ public class GameManager : MonoBehaviour
     void Restart()
     {
         GameEvents.OnResetGame?.Invoke();
+        currentLevel = 1;
         player.position = startPosition;
         gameTime = 60f;
         timerRoutine = null;
+    }
+    /// <summary>
+    /// Avança Level
+    /// </summary>
+    void NextLevel()
+    {
+        currentLevel++;
+
+        player.position = startPosition;
+        gameTime = 60f;
+        timerRoutine = null;
+
+        GameEvents.OnNextLevel?.Invoke(currentLevel);
     }
     #endregion
 

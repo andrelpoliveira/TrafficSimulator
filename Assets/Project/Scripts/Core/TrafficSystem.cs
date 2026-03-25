@@ -33,6 +33,9 @@ public class TrafficSystem : MonoBehaviour
         "light rain",
         "heavy rain"
     };
+    [Tooltip("Sistema de Levels")]
+    private int currentLevel = 1;
+    private float difficultyMultiplier = 1f;
 
     #region Eventos
     /// <summary>
@@ -42,6 +45,7 @@ public class TrafficSystem : MonoBehaviour
     {
         GameEvents.OnGameStart += StartGame;
         GameEvents.OnResetGame += StopGame;
+        GameEvents.OnNextLevel += LoadNextLevel;
     }
     /// <summary>
     /// Retira eventos
@@ -50,6 +54,7 @@ public class TrafficSystem : MonoBehaviour
     {
         GameEvents.OnGameStart -= StartGame;
         GameEvents.OnResetGame -= StopGame;
+        GameEvents.OnNextLevel -= LoadNextLevel;
     }
     #endregion
 
@@ -59,7 +64,7 @@ public class TrafficSystem : MonoBehaviour
     /// </summary>
     private void StartGame()
     {
-        Debug.Log("Start Traffic");
+        //Debug.Log("Start Traffic");
         mainRoutine = StartCoroutine(TrafficLoop());
     }
     /// <summary>
@@ -77,6 +82,21 @@ public class TrafficSystem : MonoBehaviour
 
         trafficSpawner.StopAllLanes();
     }
+
+    void LoadNextLevel(int level)
+    {
+        currentLevel = level;
+
+        difficultyMultiplier = 1f + (level * 0.15f);
+
+        StopAllCoroutines();
+
+        trafficSpawner.StopAllLanes();
+
+        predictionQueue.Clear();
+
+        mainRoutine = StartCoroutine(TrafficLoop());
+    }
     #endregion
 
     #region API callback
@@ -86,7 +106,7 @@ public class TrafficSystem : MonoBehaviour
     /// <param name="data"></param>
     void OnDataReceived(TrafficResponse data)
     {
-        Debug.Log("Dados recebidos!");
+        //Debug.Log("Dados recebidos!");
 
         //Aplica estado atual atual
         ApplyStatus(data.current_status);
@@ -130,7 +150,7 @@ public class TrafficSystem : MonoBehaviour
 
                 if(!IsValidTransition(currentStatus.weather, nextWeather))
                 {
-                    Debug.Log("Clima inválido, corrigindo...");
+                    //Debug.Log("Clima inválido, corrigindo...");
                     nextWeather = GetNextWeather(currentStatus.weather);
                 }
 
@@ -139,7 +159,7 @@ public class TrafficSystem : MonoBehaviour
                 ApplyStatus(prediction.predictions);
             }
 
-            Debug.Log("Fila finalizada -> buscando nova API...");
+            //Debug.Log("Fila finalizada -> buscando nova API...");
         }
     }
     #endregion
@@ -153,6 +173,10 @@ public class TrafficSystem : MonoBehaviour
     {
         currentStatus = status;
 
+        // Ajuste de dificuldade
+        float adjustedDensity = Mathf.Clamp(status.vehicleDensity * difficultyMultiplier, 0.0f, 1.0f);
+        float adjustedSpeed = Mathf.Clamp(status.averageSpeed * difficultyMultiplier, 0.0f, 120f);
+
         PredictedStatus nextPrediction = null;
 
         if(predictionQueue.Count > 0)
@@ -161,10 +185,13 @@ public class TrafficSystem : MonoBehaviour
         uiManager.UpdateHUD(status, nextPrediction);
 
         // Spawn de veículos
-        trafficSpawner.UpdateTraffic(status);
+        trafficSpawner.UpdateTraffic(adjustedDensity, adjustedSpeed);
 
         // Player
         float playerMultiplier = GetWeatherMultiplier(status.weather);
+
+        playerMultiplier /= difficultyMultiplier;
+
         player.ApplyWeather(playerMultiplier);
 
         //VFX

@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text nextWeatherText; // Texto da previsão
     public TMP_Text nextWeatherTimeText; // Texto do tempo para o próximo clima
     public TMP_Text countDownGameText; // Texto para a contagem regressiva de tempo do jogo
+    public TMP_Text currentLevelText; // Texto para o level atual do jogo
 
     #region Eventos
     /// <summary>
@@ -33,6 +34,7 @@ public class UIManager : MonoBehaviour
         GameEvents.OnPlayerWin += Win;
         GameEvents.OnResetGame += StartGame;
         GameEvents.OnTimeUpdated += UpdateTimer;
+        GameEvents.OnNextLevel += NextLevel;
     }
     /// <summary>
     /// Retira eventos
@@ -43,6 +45,7 @@ public class UIManager : MonoBehaviour
         GameEvents.OnPlayerWin -= Win;
         GameEvents.OnResetGame -= StartGame;
         GameEvents.OnTimeUpdated -= UpdateTimer;
+        GameEvents.OnNextLevel -= NextLevel;
     }
     #endregion
 
@@ -68,6 +71,7 @@ public class UIManager : MonoBehaviour
         gameCountdownPanel.SetActive(false);
         winPanel.SetActive(false);
         losePanel.SetActive(false);
+        UpdateLevel(1);
     }
     /// <summary>
     /// Função do botão de início do game
@@ -145,6 +149,11 @@ public class UIManager : MonoBehaviour
 
         countDownGameText.text = $"{minutes:00}:{seconds:00}";
     }
+
+    public void UpdateLevel(int nextLevel)
+    {
+        currentLevelText.text = nextLevel.ToString();
+    }
     /// <summary>
     /// Sistema de cores do TMP_Text por clima
     /// </summary>
@@ -176,6 +185,17 @@ public class UIManager : MonoBehaviour
     {
         winPanel.SetActive(true);
         gameStatusPanel.SetActive(false);
+    }
+    /// <summary>
+    /// Avanço de level
+    /// </summary>
+    /// <param name="level"></param>
+    public void NextLevel(int level)
+    {
+        gameCountdownPanel.SetActive(false);
+        winPanel.SetActive(false);
+        BtnStartGame();
+        UpdateLevel(level);
     }
     /// <summary>
     /// Sistema de cores do TMP_Text do contador
