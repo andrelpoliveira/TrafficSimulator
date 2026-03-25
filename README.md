@@ -105,7 +105,7 @@ As transições visuais são gerenciadas usando o Volume Global do Unity (Pós-p
 
 - Arquivo: `Assets/Project/Scripts/Mock/traffic-api-mock.json`
 
-3. Inicie o servidor em: http://localhost:3001/v1/traffic/status
+3. Inicie o servidor em: http://localhost:3001
 
 ---
 
